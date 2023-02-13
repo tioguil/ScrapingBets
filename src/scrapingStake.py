@@ -29,15 +29,14 @@ def find_mark(outcome_name_string):
 
 
 def find_team(player_name):
-    csv_file = csv.reader(open('data/playersName.csv', "r"), delimiter="\t")
+    csv_file = csv.reader(open('src/data/playersName.csv', "r"), delimiter="\t")
 
     for row in csv_file:
         if row[0].lower() == player_name.lower():
             return row[1]
 
 
-def build_line(bet, stake):
-    stakeDefault = 450
+def build_line(bet, stake, stake_default):
     house = "Stake"
 
     overview_bet = bet.find(class_="overview")
@@ -74,7 +73,7 @@ def build_line(bet, stake):
     odd_string = odd.select('span')[0].text
     print(odd_string)
 
-    unity = stake * 1 / stakeDefault
+    unity = stake * 1 / stake_default
     unity = str(round(unity, 2)).replace(".", ",")
 
     csv_line = "{date}\t{name}\t{team}\t{mark}\t{side}\t{line}\t{house}\t{odd}\t{unity}\n".format(
@@ -102,17 +101,16 @@ def find_stake(bet_line):
     return stake
 
 
-def run_scraping_stake():
-    url = 'C:/Users/guil_/Downloads/stake.html'
+def run_scraping_stake(src_page, stake_default):
 
-    with open(url, 'r', encoding="utf8") as f:
+    with open(src_page, 'r', encoding="utf8") as f:
         webpage = f.read()
 
     soup = BeautifulSoup(webpage, 'html.parser')
 
     bet_list = soup.find(class_="betlist-scroll")
 
-    writerFile = open("../saida/stakeSaida.csv", 'w', encoding="utf8")
+    writerFile = open("saida/stakeSaida.csv", 'w', encoding="utf8")
 
     for bet_line in bet_list:
 

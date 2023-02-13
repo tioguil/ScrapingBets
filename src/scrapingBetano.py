@@ -7,15 +7,14 @@ from datetime import datetime
 
 
 def findTeam(player_name):
-    csv_file = csv.reader(open('data/playersName.csv', "r"), delimiter="\t")
+    csv_file = csv.reader(open('src/data/playersName.csv', "r"), delimiter="\t")
 
     for row in csv_file:
         if row[0].lower() == player_name.lower():
             return row[1]
 
 
-def build_line(bet):
-    stakeDefault = 450
+def build_line(bet, stake_default):
     house = "Betano"
 
     simpleBet = bet.find(class_="bet-label__title").text
@@ -51,7 +50,7 @@ def build_line(bet):
     name = re.search(r"(\[).+(\])", mercadoLine)[0]
     name = re.sub(r"[\[\]]", "", name)
 
-    unity = stake * 1 / stakeDefault
+    unity = stake * 1 / stake_default
     unity = str(round(unity, 2)).replace(".", ",")
 
     team = findTeam(name) if findTeam(name) else ""
@@ -72,24 +71,23 @@ def build_line(bet):
     return line
 
 
-def run_scraping_betano():
-    url = 'C:/Users/guil_/Downloads/betanoPage.html'
+def run_scraping_betano(src_page, stake_default):
 
-    with open(url, 'r', encoding="utf8") as f:
+    with open(src_page, 'r', encoding="utf8") as f:
         webpage = f.read()
 
     soup = BeautifulSoup(webpage, 'html.parser')
 
     bet_list = soup.find(class_="bet-list")
 
-    writerFile = open("../saida/betanoSaida.csv", 'w', encoding="utf8")
+    writerFile = open("saida/betanoSaida.csv", 'w', encoding="utf8")
 
     for bet_line in bet_list:
 
         if type(bet_line) is not bs4.Tag or bet_line.has_attr("class"):
             continue
 
-        line_string = build_line(bet_line)
+        line_string = build_line(bet_line, stake_default)
         if line_string:
             writerFile.write(line_string)
 

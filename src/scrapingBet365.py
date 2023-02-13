@@ -20,8 +20,7 @@ def getLine(market_line, participant_line):
         return re.findall(r"[\d\.]+$", participant_line)[0].replace(".", ",")
 
 
-def buildLine(bet):
-    stakeDefault = 450
+def buildLine(bet, stake_default):
 
     betType = bet.find(class_="myb-OpenBetItem_HeaderText").text
 
@@ -53,8 +52,8 @@ def buildLine(bet):
     time = deparaTimes(time)
     side = getSide(marketLine, participantLine)
     prop = getLine(marketLine, participantLine)
-    stake = float(stake.replace("R$", "").replace(",", "."))
-    unity = stake * 1 / stakeDefault
+    stake = float(stake.replace(".", "").replace("R$", "").replace(",", "."))
+    unity = stake * 1 / stake_default
     unity = str(round(unity, 2)).replace(".", ",")
 
     csv_line = "{date}\t{name}\t{time}\t{mercado}\t{side}\t{linha}\tBet365\t{odd}\t{unidade}\n".format(
@@ -72,20 +71,19 @@ def buildLine(bet):
     return csv_line
 
 
-def run_scraping_denise():
-    src = 'C:/Users/guil_/Downloads/bet365Page.html'
+def run_scraping_denise(src_page, stake_default):
 
-    with open(src, 'r', encoding="utf8") as f:
+    with open(src_page, 'r', encoding="utf8") as f:
         webpage = f.read()
 
     soup = BeautifulSoup(webpage, 'html.parser')
 
     bet_list = soup.find(class_="myb-BetItemsContainer_BetItemsContainer")
 
-    writerFile = open("../saida/bet365Saida.csv", 'w', encoding="utf8")
+    writerFile = open("saida/bet365Saida.csv", 'w', encoding="utf8")
 
     for bet_line in bet_list:
-        line = buildLine(bet_line)
+        line = buildLine(bet_line, stake_default)
         if line:
             writerFile.write(line)
 

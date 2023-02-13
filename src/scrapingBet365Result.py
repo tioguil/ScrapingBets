@@ -21,7 +21,7 @@ def getLine(market_line, participant_line):
 
 
 def buildLine(bet):
-    stakeDefault = 450
+    stakeDefault = 400
 
     betType = bet.find(class_="myb-SettledBetItemHeader_Text").text
 
