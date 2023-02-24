@@ -31,6 +31,6 @@ if __name__ == '__main__':
     stake = 400
     run_scraping_betano('C:/Users/guil_/Downloads/betanoPage.html', stake)
     run_scraping_denise('C:/Users/guil_/Downloads/bet365Page.html', stake)
-    run_scraping_stake('C:/Users/guil_/Downloads/stake.html', stake)
+    # run_scraping_stake('C:/Users/guil_/Downloads/stake.html', stake)
     merging_files()
     print("Exit")

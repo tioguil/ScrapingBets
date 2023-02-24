@@ -30,8 +30,13 @@ def deparaMercado(mercado):
             return "PA"
         case 'Total de Rebotes e Assistências':
             return "RA"
+        case 'Total de Perdas de Bola':
+            return "TUR"
+        case 'Total Arremessos de três pontos Marcados':
+            return "Triplo"
         case _:
             return ""
+#
 
 def deparaSideBetano(side):
     match side:

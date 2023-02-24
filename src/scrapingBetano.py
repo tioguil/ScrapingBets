@@ -27,8 +27,15 @@ def build_line(bet, stake_default):
     odd = bet.find(class_="leg-info").find(class_="bet-odds__value").text
     odd = odd.replace(".", ",").replace(" ", "").replace("\n", "")
 
-    side = bet.find(class_="section-left").find(class_="selection-label").text
-    side = re.search(r"\s+(\w+\b)", side)[1]
+    side = bet.find(class_="section-left")
+    if side is None:
+        return ""
+
+    side = side.find(class_="selection-label")
+    if side is None:
+        return ""
+
+    side = re.search(r"\s+(\w+\b)", side.text)[1]
     side = deparaSideBetano(side)
 
     if side == '':
